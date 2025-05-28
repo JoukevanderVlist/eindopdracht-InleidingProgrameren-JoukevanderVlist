@@ -51,7 +51,7 @@ function handleCellClick(e) {
 
   // Controleer of de huidige speler gewonnen heeft
   if (checkWin()) {
-    message.textContent = `Speler ${currentPlayer} wint! `;
+    message.textContent = `Speler ${currentPlayer} heeft gewonnen! `;
     gameActive = false; // Stop het spel
     return;
   }
