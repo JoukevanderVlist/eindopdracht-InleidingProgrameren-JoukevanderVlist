@@ -1,36 +1,63 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Drie op een rij</title>
-<link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Tamagotchi</title>
 </head>
 <body>
+    <form name="Tamagotchi">
+        <div id="TitleText">
+            <h1 id="title">Tamagotchi</h1>
+        </div>
 
-<h1>Drie op een rij</h1>
+        <!-- Naam geving van de tamagotchi -->
+        <div id="Naam">
+            <p align="center">
+                Geef je tamagotchi een naam: 
+                <input type="text" id="tamagotchiName" placeholder="Naam van je Tamagotchi">
+                <input type="button" value="Start" onclick="startGame()">
+            </p>
+        </div>
 
-<!---
-Het spel bord aanmaken met 9 vakjes met elk een eigen index
-https://www.kirupa.com/css/creating_3x3_grid.htm
---->
-<div id="bord">
-  <div class="cell" cell-index="0"></div>
-  <div class="cell" cell-index="1"></div>
-  <div class="cell" cell-index="2"></div>
-  <div class="cell" cell-index="3"></div>
-  <div class="cell" cell-index="4"></div>
-  <div class="cell" cell-index="5"></div>
-  <div class="cell" cell-index="6"></div>
-  <div class="cell" cell-index="7"></div>
-  <div class="cell" cell-index="8"></div>
-</div>
+        <!-- Afbeelding van de tamagotchi (zelf gemaakt in powerpoint)-->
+        <div id="Tamagotchi" style="display:none;">
+            <p align="center">
+                <img id="Tamagotchi_png" src="Tamagotchi.png">
+            </p>
+        </div>
 
-<div id="message"></div>
-<button id="resetknop">Begin opnieuw</button>
+        <!-- Progressie bar voor het voeren -->
+        <div id="StatHonger" style="display:none;">
+            <p align="center">
+                Honger: <progress id="HongerBar" min="0" max="100" value="100"></progress> <!--https://www.w3schools.com/TAGs/tag_progress.asp-->
+            </p>
+        </div>
 
-<script src="script.js"></script>
+        <!-- Progressie bar voor het toiletteren -->
+        <div id="StatToilet" style="display:none;">
+            <p align="center">
+                Toilet: <progress id="ToiletBar" min="0" max="100" value="100"></progress> <!--https://www.w3schools.com/TAGs/tag_progress.asp-->
+            </p>
+        </div>
+
+        <!-- Progressie bar voor het geluk -->
+        <div id="StatGeluk" style="display:none;">
+            <p align="center">
+                Geluk: <progress id="GelukBar" min="0" max="100" value="100"></progress> <!--https://www.w3schools.com/TAGs/tag_progress.asp-->
+            </p>
+        </div>
+
+        <!-- Knoppen voor het uitvoeren van de verschillende acties -->
+        <div id="Buttons" style="display:none;">
+            <p align="center">
+                <input id="voeren" type="button" value="Voeden">
+                <input id="toilet" type="button" value="Toilet">
+                <input id="spelen" type="button" value="Spelen">
+            </p>
+        </div>
+    </form>
+
+    <script src="script.js"></script>
 </body>
 </html>
-
-

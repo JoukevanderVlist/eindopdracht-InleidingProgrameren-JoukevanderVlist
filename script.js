@@ -1,103 +1,95 @@
-// Constanten
-// Het bord met 9 vakjes, elk vakje begint leeg
-const bord = ['', '', '', '', '', '', '', '', ''];
+let honger = 100; // Begin met 100
+let toilet = 100; // Begin met 100
+let geluk = 100; // Begin met 100
+let gameover = 0; // 0 = spel bezig, 1 = spel over
+let clock1, clock2, clock3; // Maak de drie klokken aan om later up te daten
+let tamagotchiName = ""; // Begin met een lege naam
 
-// Alle mogelijke winnende combinaties van bordindexen
-const winningConditions = [
-  [0,1,2], // bovenste rij
-  [3,4,5], // middelste rij
-  [6,7,8], // onderste rij
-  [0,3,6], // eerste kolom
-  [1,4,7], // tweede kolom
-  [2,5,8], // derde kolom
-  [0,4,8], // diagonaal van linksboven naar rechtsonder
-  [2,4,6]  // diagonaal van rechtsboven naar linksonder
-];
+document.getElementById("voeren").onclick = HongerBar; // Als er op de knop voeren wordt geklikt, wordt de functie HongerBar uitgevoerd
+document.getElementById("toilet").onclick = ToiletBar; // Als er op de knop toilet wordt geklikt, wordt de functie ToiletBar uitgevoerd
+document.getElementById("spelen").onclick = GelukBar; // Als er op de knop spelen wordt geklikt, wordt de functie GelukBar uitgevoerd
 
-// Selecteer alle vakjes op het bord (html elementen met class 'cell')
-const cells = document.querySelectorAll('.cell');
+function startGame() { // Functie om het spel te starten
+    tamagotchiName = document.getElementById("tamagotchiName").value; 
 
-// Selecteer het tekstvak waar we berichten weergeven
-const message = document.getElementById('message');
+    if (tamagotchiName === "") {
+        alert("Voer een naam in voor je Tamagotchi."); // Zorg ervoor dat er een naam wordt ingevoerd
+        return;
+    }
 
-// Selecteer de resetknop om het spel opnieuw te starten
-const resetknop = document.getElementById('resetknop');
+    // Updtae de titel met de gegeven tamagotchi titel
+    document.getElementById("title").innerText = "Tamagotchi: " + tamagotchiName;
 
+    document.getElementById("Naam").style.display = "none"; // Als de naam is ingevoerd wordt het invoerveld van de naam verborgen
+    // De regels hieronder zorgen ervoor dat de elementen pas zichtbaar worden na het starten van het spel
+    document.getElementById("Tamagotchi").style.display = "block";
+    document.getElementById("StatHonger").style.display = "block";
+    document.getElementById("StatToilet").style.display = "block";
+    document.getElementById("StatGeluk").style.display = "block";
+    document.getElementById("Buttons").style.display = "block";
 
-
-// Variabelen
-// Het spel begint met speler 'X'
-let currentPlayer = 'X';
-
-// Geeft aan of het spel nog actief is of al voorbij
-let gameActive = true;
-
-
-
-// Functies
-// Wordt uitgevoerd als er op een vakje geklikt wordt
-// https://www.w3schools.com/jsref/event_onclick.asp
-function handleCellClick(e) {
-  // Haal de index van het aangeklikte vakje op
-  // https://www.scaler.com/topics/event-target-javascript/
-  const index = e.target.getAttribute('cell-index');
-
-  // Als het vakje niet meer leeg is of het spel is niet meer actief, stop dan
-  if (bord[index] !== '' || !gameActive) return;
-
-  // Zet het symbool van de huidige speler op het bord en in het vakje, X of O
-  bord[index] = currentPlayer;
-  e.target.textContent = currentPlayer;
-
-  // Controleer of de huidige speler gewonnen heeft
-  if (checkWin()) {
-    message.textContent = `Speler ${currentPlayer} heeft gewonnen! `;
-    gameActive = false; // Stop het spel
-    return;
-  }
-
-  // Controleer voor gelijkspel
-  // Als het bord geen lege vakjes meer bevat en er geen winnaar is gekomen uit 'checkWin' dan is het gelijkspel
-  if (!bord.includes('')) {
-    message.textContent = `Gelijkspel!`;
-    gameActive = false;
-    return;
-  }
-
-  // Wissel van speler
-  // Als de huidige speler, speler X is, wordt de volgende speler, speler O, 
-  // als het niet speler X is, wordt de volgende speler, speler X
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-
-  // Laat weten wie nu aan de beurt is
-  message.textContent = `Speler ${currentPlayer} is aan de beurt`;
+    // Pas de eerder gedefinieerde klokken aan met elk een eigen tijd interval
+    clock1 = setInterval(AfnameHonger, 200);
+    clock2 = setInterval(AfnameToilet, 300);
+    clock3 = setInterval(AfnameGeluk, 250);
 }
 
-// Controleert of de huidige speler heeft gewonnen
-function checkWin() {
-  return winningConditions.some(condition => {
-    return condition.every(index => bord[index] === currentPlayer);
-  });
+// Functie om te controleren of het spel over is
+// Het spel is over als alle vier de waarden gelijk zijn aan 0
+function gameovercheck() {
+    if (honger === 0 && toilet === 0 && geluk === 0 && gameover === 0) {
+        alert("Je Tamagotchi heeft het niet overleefd");
+        gameover++;
+    }
 }
 
-// Zet het spel terug naar het begin, maak alle cellen leeg en begin weer met speler X
-function resetGame() {
-  for(let i = 0; i < bord.length; i++) {
-    bord[i] = '';
-    cells[i].textContent = '';
-  }
-  currentPlayer = 'X';
-  gameActive = true;
-  message.textContent = `Speler ${currentPlayer} is aan de beurt`;
+// Per keer dat er op de voer knop geklikt wordt komt er 2 bij, alleen als de huidige waarde kleiner of gelijk is aan 99 en niet 0
+function HongerBar() {
+    if (honger <= 99 && honger !== 0) honger += 2;
 }
 
+// Per keer dat er toilet knop wordt geklikt komt er 2 bij, alleen als de huidige waarde kleiner of gelijk is aan 99 en niet 0
+function ToiletBar() {
+    if (toilet <= 99 && toilet !== 0) toilet += 2;
+}
 
+// Per keer dat er geluk knop wordt geklikt komt er 2 bij, alleen als de huidige waarde kleiner of gelijk is aan 99 en niet 0
+function GelukBar() {
+    if (geluk <= 99 && geluk !== 0) geluk += 2;
+}
 
-// EventListeners
-cells.forEach(cell => cell.addEventListener('click', handleCellClick));
-resetknop.addEventListener('click', resetGame);
+// Functie voor het afnemen van de voortgangsbalk
+function AfnameHonger() {
+    if (honger === 0) { // Als honger gelijk is aan 0
+        clearInterval(clock1); // Zorgt ervoor dat de honger niet nog verder afneemt
+        alert("Je Tamagotchi heeft honger"); // Alert om aan te geven dat de tamagotchi honger heeft
+        gameovercheck(); // Checken of het spel over is
+    } else { // Als honger niet gelijk is aan 0
+        honger--; // Honger -1
+        document.getElementById("HongerBar").value = honger; // De progress bar updaten naar de nieuwe waarde 
+    }
+}
 
+// Functie voor het afnemen van de voortgangsbalk
+function AfnameToilet() {
+    if (toilet === 0) { // Als toilet gelijk is aan 0
+        clearInterval(clock2); // Zorgt ervoor dat het toilet niet nog verder afneemt
+        alert("Je Tamagotchi moet naar de wc"); // Alert om aan te geven dat de tamagotchi naar het toilet moet
+        gameovercheck(); // Checken of het spel over is
+    } else { // Als toilet niet gelijk is aan 0
+        toilet--; // Toilet -1
+        document.getElementById("ToiletBar").value = toilet; // De progress bar updaten naar de nieuwe waarde 
+    }
+}
 
-
-// Overig
-message.textContent = `Speler ${currentPlayer} is aan de beurt`;
+// Functie voor het afnemen van de voortgangsbalk
+function AfnameGeluk() {
+    if (geluk === 0) { // Als toilet gelijk is aan 0
+        clearInterval(clock3); // Zorgt ervoor dat het geluk niet nog verder afneemt
+        alert("Je Tamagotchi is ongelukkig"); // Alert om aan te geven dat de tamagotchi ongelukkig is
+        gameovercheck(); // Checken of het spel over is
+    } else { // Als geluk niet gelijk is aan 0
+        geluk--; // Geluk -1
+        document.getElementById("GelukBar").value = geluk; // De progress bar updaten naar de nieuwe waarde 
+    }
+}
